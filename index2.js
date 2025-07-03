@@ -13,8 +13,25 @@ setTimeout(() => {
 
 
 fs.readFile("demo.txt","utf-8",(data)=>{
-    console.log(data)
+    
     console.log("file read");
+    console.log(data);
 })
 
+function someTask(){
+    return new Promise((resolve,reject)=>{
+        resolve("promise")
+    })
+}
+someTask().then((data)=>{
+    console.log(data)
+})
+.catch((err)=>{
+    console.log(err)
+})
+
+process.nextTick(()=>{
+    console.log("next tick")
+})
 console.log("end");
+
