@@ -22,9 +22,6 @@ app.post("/adduser", (req, res) => {
     })
     res.send("User added successfully");
 })
-// app.get("/adduser", (req, res) => {
-//     res.sendFile(__dirname + "/registration.html");
-// });
 
 const port = 5555;
 
