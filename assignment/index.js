@@ -33,15 +33,15 @@ fs.readFile("products.txt", "utf-8", (err, pdata) => {
       return;
     }
 
-    // Update user and product data
+    
     product.quantity -= 1;
     user.balance -= product.price;
 
-    // Save updated products
+    
     fs.writeFile("products.txt", JSON.stringify(products, null, 2), (err) => {
       if (err) return console.log("Error writing products.txt:", err);
 
-      // Save updated users
+      
       fs.writeFile("users.txt", JSON.stringify(users, null, 2), (err) => {
         if (err) return console.log("Error writing users.txt:", err);
 
@@ -52,7 +52,7 @@ fs.readFile("products.txt", "utf-8", (err, pdata) => {
           timestamp: new Date().toISOString()
         };
 
-        // Append order history
+        
         fs.appendFile("orderHistory.txt", JSON.stringify(order) + "\n", (err) => {
           if (err) return console.log("Error writing orderHistory.txt:", err);
           console.log("Order placed successfully!");
