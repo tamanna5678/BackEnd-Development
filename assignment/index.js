@@ -3,90 +3,61 @@
 
 const fs = require("fs");
 
-let productsname = [
-    {
-        id:1,
-        name:"a",
-        quantity:"50"
-    },
-    {
-        id:2,
-        name:"b",
-        quantity:"25"
-    },
-    {
-        id:3,
-        name:"c",
-        quantity:"100"
-    },
-    {
-        id:4,
-        name:"d",
-        quantity:"80"
-    }
-]
-let users = [
-    {
-        id:1,
-        name:"thakral",
-        age:"21"
-    },
-    {
-        id:2,
-        name:"tamanna",
-        age:"25"
-    },
-     {
-        id:3,
-        name:"abcde",
-        age:"24"
-    },
-     {
-        id:4,
-        name:"pqrst",
-        age:"28"
+let username = process.argv[2];
+let productname = process.argv[3];
+
+fs.readFile("products.txt", "utf-8", (err, pdata) => {
+  if (err) return console.log("Error reading products.txt:", err);
+
+  let products = JSON.parse(pdata);
+  let product = products.find(p => p.name === productname);
+
+  if (!product || product.quantity <= 0) {
+    console.log("Product is not available");
+    return;
+  }
+
+  fs.readFile("users.txt", "utf-8", (err, udata) => {
+    if (err) return console.log("Error reading users.txt:", err);
+
+    let users = JSON.parse(udata);
+    let user = users.find(u => u.name === username);
+
+    if (!user) {
+      console.log("User not found");
+      return;
     }
 
-]
-fs.writeFile("../users.txt",JSON.stringify(users),function(err){
-    if(err) return console.log(err);
-    console.log("users displayed...")
-    console.log(users)
-})
-
-fs.writeFile("../products.txt",JSON.stringify(productsname),function(err){
-    if(err) return console.log(err);
-    console.log("products displayed...")
-    console.log(productsname)
-})
-
-// function buyProduct(users,productname){
-
-// }
-
-
-function buyProduct(productsname, cb) {
-  let isProduct = null;
-  for (let i = 0; i < products.length; i++) {
-    if (products[i].name === productsname) {
-      isProduct = products[i];
-      break;
+    if (user.balance < product.price) {
+      console.log("Insufficient balance");
+      return;
     }
-  }
-  if (!isProduct) {
-    cb("Product is not available", null);
-  } else if (isProduct.quantity <= 0) {
-    cb("Product is out of stock", null);
-  } else {
-    isProduct.quantity -= 1;
-    cb(null, `Successfully purchased ${productsname}. Remaining stock: ${isProduct.quantity}`);
-  }
-}
 
-buyProduct(productsname, function (err, message) {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log(message);
-  }
+    // Update user and product data
+    product.quantity -= 1;
+    user.balance -= product.price;
+
+    // Save updated products
+    fs.writeFile("products.txt", JSON.stringify(products, null, 2), (err) => {
+      if (err) return console.log("Error writing products.txt:", err);
+
+      // Save updated users
+      fs.writeFile("users.txt", JSON.stringify(users, null, 2), (err) => {
+        if (err) return console.log("Error writing users.txt:", err);
+
+        let order = {
+          user: user.name,
+          product: product.name,
+          amount: product.price,
+          timestamp: new Date().toISOString()
+        };
+
+        // Append order history
+        fs.appendFile("orderHistory.txt", JSON.stringify(order) + "\n", (err) => {
+          if (err) return console.log("Error writing orderHistory.txt:", err);
+          console.log("Order placed successfully!");
+        });
+      });
+    });
+  });
 });
