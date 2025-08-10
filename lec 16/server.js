@@ -4,7 +4,9 @@ app.use(express.static(__dirname + "/public"));
 app.use(express.json());
 app.use(express.urlencoded());
 app.post('/user', (req, res) => {
+    
     try{
+
         let email = req.body.email;
         let password = req.body.password;
         console.log({ email, password });
@@ -17,6 +19,7 @@ app.post('/user', (req, res) => {
     });
 
 }catch(err){
+
     res.json({
         success: false,
         message: "Error adding user",

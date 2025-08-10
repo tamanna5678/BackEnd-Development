@@ -20,4 +20,5 @@ function adduser(email,password){
         console.error(err.message);
     });
 }
+
 adduser("tamanna2461@gmail.com","password123")
