@@ -13,6 +13,7 @@ function addUser(email,password){
         headers:{
             "content-type":"application/json"
         }
+        
     }).then((response)=>{
         return response.json();
     }).then((data)=>{
