@@ -5,7 +5,11 @@ const BlogPost = new Schema({
   
   title: String,
   body: String,
-  date: Date
+  date: Date,
+  userId:{
+    type: mongoose.Types.ObjectId,
+    ref:"user"
+  }
 });
 
 module.exports = mongoose.model("Blog", BlogPost);
