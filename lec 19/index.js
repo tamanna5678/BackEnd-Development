@@ -1,25 +1,19 @@
-const express=require("express")
-const mongoose=require("mongoose")
-
-const app=express()
-
-const Users=require("./model/user")
-const Blog=require("./model/blog")
-let blogRoute=require("./routes/blogRoutes")
-let userRoutes=require("./routes/userRoutes")
-
-app.use(express.urlencoded({extended:true}))
-app.use(express.json())
+const express = require("express");
+const mongoose = require('mongoose');
+const app = express();
+const Blog= require("./model/blog")
+const User= require("./model/user")
+let blogRoutes=require("./routes/blogRoutes")
+let userRoutes= require("./routes/userRoutes")
+app.use(express.urlencoded({extended:true}));
+app.use(express.json());
 
 //create
-app.use("/api/blogs",blogRoute)
+app.use("/api/blogs",blogRoutes)
 app.use("/api/users",userRoutes)
 
-
-
-mongoose.connect('mongodb://127.0.0.1:27017/g27dB')
+mongoose.connect("mongodb://127.0.0.1:27017/5thsem")
   .then(() => console.log('Connected!'));
-
-app.listen(9999,()=>{
+app.listen(8888,()=>{
     console.log("server started")
 })
